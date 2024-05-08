@@ -5,7 +5,7 @@ import PromptCard from "./PromptCard"
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
-    <div className="mt-16 prompt-layout">
+    <div className="mt-16 prompt_layout">
       {/* Iterates through the prompts in the data prop and renders the promptcard component for each post. */}
       {data.map((post) => (
         <PromptCard
@@ -53,11 +53,10 @@ const Feed = () => {
       </form>
 
       <PromptCardList
-      //Passes the posts state to the PromptCardList component
-      data={posts}
-      handleTagClick={() => {}}
-      
-    />
+        //Passes the posts state to the PromptCardList component
+        data={posts}
+        handleTagClick={() => {}}
+      />
     </section>
   )
 }

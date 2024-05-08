@@ -1,45 +1,45 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import Profile from "@components/profile";
+import Profile from "@components/Profile";
 
 const MyProfile = () => {
-    const [posts, setPosts] = useState([]);
-    // Gets the session(user data) from the useSession hook
-    const {data: session} = useSession();
+  const router = useRouter();
+  const { data: session } = useSession();
 
-    const handleEdit = () => {
+  const [posts, setPosts] = useState([]);
 
-    }
-    const handleDelete = async() => {
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await fetch(`/api/users/${session?.user.id}/posts`);
+      const data = await response.json();
 
-    }
+      setPosts(data);
+    };
 
-    useEffect (() => {
-        const fetchPosts = async() => {
-          //Gets all prompts from the database
-          const response = await fetch('/api/users/${session?.user.id}/posts');
-          //Converts the response to JSON
-          const data = await response.json();
-          //Sets the posts state to the data from the database
-          setPosts(data);
-        }
-        //Calls the fetchPosts function when the component mounts
-        if (session?.user.id) fetchPosts();
-      }, [])
+    if (session?.user.id) fetchPosts();
+  }, [session?.user.id]);
+
+  const handleEdit = () => {
+
+  };
+
+  const handleDelete = async () => {
+
+  };
 
   return (
-    <Profile 
-    name='My'
-    desc='Welcome to your personalized profile page.'
-    data={posts}
-    handleEdit={handleEdit}
-    handleDelete={handleDelete}
+    <Profile
+      name='My'
+      desc='Welcome to your personalized profile page. Share your exceptional prompts and inspire others with the power of your imagination'
+      data={posts}
+      handleEdit={handleEdit}
+      handleDelete={handleDelete}
     />
-  )
-}
+  );
+};
 
-export default MyProfile
+export default MyProfile;
