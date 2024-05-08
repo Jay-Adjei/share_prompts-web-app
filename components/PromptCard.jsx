@@ -2,9 +2,17 @@ import { useState } from "react"
 import Image from "next/image"
 import { useSession } from "next-auth/react"
 import { usePathname, useRouter } from "next/navigation"
+import { set } from "mongoose"
 
 const PromptCard = ({ post, handleTagClick}) => {
-  const [copied, setCopied] = useState('')
+  const [copied, setCopied] = useState(''); //State to check if the prompt is copied
+
+//Handles the copy of the prompt
+  const handleCopy = () => {
+    setCopied(post.prompt);
+    navigator.clipboard.writeText(post.prompt);
+    setTimeout(() => setCopied(''), 3000);
+  }
 
   return (
     <div className="prompt_card">
@@ -27,7 +35,7 @@ const PromptCard = ({ post, handleTagClick}) => {
           </div>
         </div>
           {/*Copy button */}
-        <div className="copy_btn" onClick={() => {}}>
+        <div className="copy_btn" onClick={() => {handleCopy()}}>
           {/* checks is the prompt copied is equal to the prompt intended to copy and renders an image based on that */}
           <Image src={copied === post.prompt?
             'assets/icons/tick.svg'
