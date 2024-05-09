@@ -4,8 +4,12 @@ import { useSession } from "next-auth/react"
 import { usePathname, useRouter } from "next/navigation"
 import { set } from "mongoose"
 
-const PromptCard = ({ post, handleTagClick}) => {
+const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
   const [copied, setCopied] = useState(''); //State to check if the prompt is copied
+  const { data: session } = useSession(); //Session data
+  const router = useRouter(); //Router to navigate to different pages
+
+  const pathName = usePathname(); //Pathname of the current page
 
 //Handles the copy of the prompt
   const handleCopy = () => {
@@ -52,10 +56,28 @@ const PromptCard = ({ post, handleTagClick}) => {
         </p>
       <p className="font-inter text-sm blue_gradient cursor-pointer"
       onClick={() => handleTagClick && handleTagClick(post.tag)}> {/*If tag exists then we will be able to click and show all relevant/similar tags */}
-        {post.tag}
+        #{post.tag}
       </p>
+
+        {/* checks if the user is the creator of the post and the pathname is profile then renders the following */}
+        {session?.user.id === post.creator._id && pathName === "/profile" && (
+        <div className='mt-1 flex-end gap-4 border-t border-gray-100 pt-1'>
+          <p
+            className='font-inter text-sm green_gradient cursor-pointer'
+            onClick={handleEdit}
+          >
+            Edit
+          </p>
+          <p
+            className='font-inter text-sm orange_gradient cursor-pointer'
+            onClick={handleDelete}
+          >
+            Delete
+          </p>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
 export default PromptCard
