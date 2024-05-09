@@ -24,11 +24,27 @@ const MyProfile = () => {
   }, [session?.user.id]);
 
   const handleEdit = (post) => {
+    //Navigate to the update prompt page with the id of the post (adds a query parameter named id to the URL)
     router.push(`/update-prompt?id=${post._id}`)
   };
 
   const handleDelete = async (post) => {
+    const hasConfirmed = confirm("Are you sure you want to delete this prompt?");
 
+    if(hasConfirmed){
+      try {
+        await fetch(`/api/prompt/${post._id.toString()}`,{
+          method: 'DELETE',
+  
+        } )
+          //if the current element's(p) _id is different from the one being deleted(post.id), include it in the new filteredPosts array , otherwise exclude it.
+        const filteredPosts = posts.filter((item) => item._id !== post._id);
+
+        setPosts(filteredPosts)
+      } catch (error) {
+        console.log(error)
+      }
+    }
   };
 
   return (
