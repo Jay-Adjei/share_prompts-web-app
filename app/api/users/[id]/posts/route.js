@@ -4,7 +4,7 @@ import { connectToDB } from "@utils/database";
 export const GET = async (request, { params }) => {
     try {
         await connectToDB()
-
+        //find all prompts created by a user by matching the dynamic user id extracted from the URL to the creator field
         const prompts = await Prompt.find({ creator: params.id }).populate("creator")
 
         return new Response(JSON.stringify(prompts), { status: 200 })

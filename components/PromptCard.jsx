@@ -1,8 +1,8 @@
-import { useState } from "react"
-import Image from "next/image"
-import { useSession } from "next-auth/react"
-import { usePathname, useRouter } from "next/navigation"
-import { set } from "mongoose"
+import { useState } from "react";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
   const [copied, setCopied] = useState(''); //State to check if the prompt is copied
@@ -21,7 +21,15 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
   return (
     <div className="prompt_card">
       <div className="flex justify-between items-start gap-5">
-        <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
+        <Link 
+        className="flex-1 flex justify-start items-center gap-3 cursor-pointer"
+        href= {
+          session?.user.id === post.creator._id ?(
+            '/profile'
+          ):(
+            `/profile/${post.creator._id}?name=${post.creator.username}`
+          )
+        }>
           <Image 
           src={post.creator.image}
           alt="User_image"
@@ -37,7 +45,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
               {post.creator.email}
             </p>
           </div>
-        </div>
+        </Link>
           {/*Copy button */}
         <div className="copy_btn" onClick={() => {handleCopy()}}>
           {/* checks is the prompt copied is equal to the prompt intended to copy and renders an image based on that */}

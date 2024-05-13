@@ -1,6 +1,10 @@
+import Image from "next/image";
 import PromptCard from "./PromptCard";
+import { useSession } from "next-auth/react";
 
 const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
+  const {data: session} = useSession();
+
   return (
     <section className='w-full'>
       <h1 className='head_text text-left'>
