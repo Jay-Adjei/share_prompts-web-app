@@ -72,7 +72,7 @@ const EditPrompt = () => {
 const Page = () => {
     return (
         <Suspense>
-            <UpdatePrompt />
+            <EditPrompt />
         </Suspense>
     )
 }
