@@ -3,14 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import {
-  signIn,
-  signOut,
-  UseSession,
-  getProviders,
-  useSession,
-} from "next-auth/react";
-import Dropdown from "@components/DropDown.jsx";
+import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
   const { data: session } = useSession();
@@ -21,12 +14,25 @@ const Nav = () => {
   useEffect(() => {
     const setUpProviders = async () => {
       const response = await getProviders();
-
       setProviders(response);
     };
     setUpProviders();
   }, []);
 
+  const handleSignOut = async () => {
+    try {
+      await signOut({ callbackUrl: "/" }); // Sign out and redirect to the home page
+    } catch (error) {
+      console.error("Failed to sign out:", error);
+    }
+  };
+  const handleSignIn = async () => {
+    try {
+      await signIn(providers.id, { callbackUrl: "/" }); // Sign in with the provider and redirect to the home page
+    } catch (error) {
+      console.error("Failed to sign in:", error);
+    }
+  };
 
   return (
     <nav className="flex-between w-full mb-16 pt-3">
@@ -41,7 +47,7 @@ const Nav = () => {
         <p className="logo_text">Promptopia</p>
       </Link>
 
-      {/*Desktop Navigation*/}
+      {/* Desktop Navigation */}
       <div className="sm:flex hidden">
         {session?.user ? (
           <div className="flex gap-3 md:gap-5">
@@ -49,7 +55,11 @@ const Nav = () => {
               Create Prompt
             </Link>
 
-            <button type="button" onClick={signOut} className="outline_btn">
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="outline_btn"
+            >
               Sign Out
             </button>
             <Link href="/profile">
@@ -69,7 +79,7 @@ const Nav = () => {
                 <button
                   type="button"
                   key={provider.name}
-                  onClick={() => signIn(provider.id)}
+                  onClick={handleSignIn}
                   className="black_btn"
                 >
                   Sign In
@@ -79,8 +89,7 @@ const Nav = () => {
         )}
       </div>
 
-      {/*Mobile Navigation*/}
-
+      {/* Mobile Navigation */}
       <div className="sm:hidden flex relative">
         {session?.user ? (
           <div className="flex">
@@ -110,10 +119,9 @@ const Nav = () => {
                   Create Prompts
                 </Link>
                 <button
-                  type="button"
                   onClick={() => {
                     setToggleDropDown(false);
-                    signOut();
+                    handleSignOut(); // Call the sign out handler
                   }}
                   className="mt-5 w-full black_btn"
                 >

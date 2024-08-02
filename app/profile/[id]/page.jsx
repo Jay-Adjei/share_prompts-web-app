@@ -53,7 +53,7 @@ const UserProfile = ({params}) => {
   return (
     <Profile
       name={`${userName}'s`}
-      desc='Welcome to your personalized profile page. Share your exceptional prompts and inspire others with the power of your imagination'
+      desc={`Welcome to ${userName}'s profile page. Here you can view all the prompts created by ${userName}.`}
       data={posts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
